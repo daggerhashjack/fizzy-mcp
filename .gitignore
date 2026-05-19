@@ -1,0 +1,12 @@
+*.gem
+.bundle/
+vendor/bundle
+pkg/
+coverage/
+.rspec_status
+.byebug_history
+/tmp/
+
+# macOS / editor junk
+.DS_Store
+*.swp

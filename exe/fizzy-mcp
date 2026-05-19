@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "fizzy_mcp"
+
+begin
+  FizzyMcp::Server.run_stdio
+rescue ArgumentError => e
+  warn "fizzy-mcp: #{e.message}"
+  warn "Set FIZZY_ACCESS_TOKEN (and optionally FIZZY_ACCOUNT_SLUG) in your environment."
+  exit 1
+rescue Interrupt
+  exit 0
+end
