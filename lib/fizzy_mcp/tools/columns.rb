@@ -17,7 +17,7 @@ module FizzyMcp
               properties: { board_id: { type: "string" } },
               required: ["board_id"]
             },
-            annotations: { read_only_hint: true, idempotent_hint: true }
+            annotations: { read_only_hint: true, destructive_hint: false, idempotent_hint: true }
           ) do |server_context:, **args|
             ToolHelpers.with_errors { ToolHelpers.ok(server_context[:account].columns.list(args[:board_id])) }
           end,
@@ -29,7 +29,7 @@ module FizzyMcp
               properties: { board_id: { type: "string" }, column_id: { type: "string" } },
               required: %w[board_id column_id]
             },
-            annotations: { read_only_hint: true, idempotent_hint: true }
+            annotations: { read_only_hint: true, destructive_hint: false, idempotent_hint: true }
           ) do |server_context:, **args|
             ToolHelpers.with_errors do
               ToolHelpers.ok(server_context[:account].columns.get(args[:board_id], args[:column_id]))
@@ -43,7 +43,7 @@ module FizzyMcp
               properties: { board_id: { type: "string" }, column_id: { type: "string" } },
               required: %w[board_id column_id]
             },
-            annotations: { read_only_hint: true, idempotent_hint: true }
+            annotations: { read_only_hint: true, destructive_hint: false, idempotent_hint: true }
           ) do |server_context:, **args|
             ToolHelpers.with_errors do
               ToolHelpers.ok(server_context[:account].columns.cards(args[:board_id], args[:column_id]))

@@ -24,7 +24,7 @@ module FizzyMcp
               properties: { id: { type: "string" } },
               required: ["id"]
             },
-            annotations: { read_only_hint: true, idempotent_hint: true }
+            annotations: { read_only_hint: true, destructive_hint: false, idempotent_hint: true }
           ) do |server_context:, **args|
             ToolHelpers.with_errors { ToolHelpers.ok(server_context[:account].exports.get_account_export(args[:id])) }
           end,
@@ -47,7 +47,7 @@ module FizzyMcp
               properties: { user_id: { type: "string" }, id: { type: "string" } },
               required: %w[user_id id]
             },
-            annotations: { read_only_hint: true, idempotent_hint: true }
+            annotations: { read_only_hint: true, destructive_hint: false, idempotent_hint: true }
           ) do |server_context:, **args|
             ToolHelpers.with_errors { ToolHelpers.ok(server_context[:account].exports.get_user_export(args[:user_id], args[:id])) }
           end

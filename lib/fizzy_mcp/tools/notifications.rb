@@ -13,7 +13,7 @@ module FizzyMcp
           MCP::Tool.define(
             name: "fizzy_notifications_list",
             description: "List notifications for the authenticated user.",
-            annotations: { read_only_hint: true, idempotent_hint: true }
+            annotations: { read_only_hint: true, destructive_hint: false, idempotent_hint: true }
           ) do |server_context:, **_args|
             ToolHelpers.with_errors { ToolHelpers.ok(server_context[:account].notifications.list) }
           end,
@@ -53,7 +53,7 @@ module FizzyMcp
           MCP::Tool.define(
             name: "fizzy_notifications_settings",
             description: "Get the user's notification preferences.",
-            annotations: { read_only_hint: true, idempotent_hint: true }
+            annotations: { read_only_hint: true, destructive_hint: false, idempotent_hint: true }
           ) do |server_context:, **_args|
             ToolHelpers.with_errors { ToolHelpers.ok(server_context[:account].notifications.settings) }
           end,

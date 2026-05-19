@@ -17,7 +17,7 @@ module FizzyMcp
               properties: { card_number: { type: "integer" }, step_id: { type: "string" } },
               required: %w[card_number step_id]
             },
-            annotations: { read_only_hint: true, idempotent_hint: true }
+            annotations: { read_only_hint: true, destructive_hint: false, idempotent_hint: true }
           ) do |server_context:, **args|
             ToolHelpers.with_errors do
               ToolHelpers.ok(server_context[:account].steps.get(args[:card_number], args[:step_id]))

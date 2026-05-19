@@ -21,7 +21,7 @@ module FizzyMcp
                 end_date: { type: "string", format: "date" }
               }
             },
-            annotations: { read_only_hint: true, idempotent_hint: true }
+            annotations: { read_only_hint: true, destructive_hint: false, idempotent_hint: true }
           ) do |server_context:, **args|
             ToolHelpers.with_errors { ToolHelpers.ok(server_context[:account].activities.list(**args)) }
           end

@@ -33,7 +33,7 @@ module FizzyMcp
                 terms: { type: "array", items: { type: "string" } }
               }
             },
-            annotations: { read_only_hint: true, idempotent_hint: true }
+            annotations: { read_only_hint: true, destructive_hint: false, idempotent_hint: true }
           ) do |server_context:, **args|
             ToolHelpers.with_errors { ToolHelpers.ok(server_context[:account].cards.list(**args)) }
           end,
@@ -45,7 +45,7 @@ module FizzyMcp
               properties: { card_number: { type: "integer" } },
               required: ["card_number"]
             },
-            annotations: { read_only_hint: true, idempotent_hint: true }
+            annotations: { read_only_hint: true, destructive_hint: false, idempotent_hint: true }
           ) do |server_context:, **args|
             ToolHelpers.with_errors { ToolHelpers.ok(server_context[:account].cards.get(args[:card_number])) }
           end,

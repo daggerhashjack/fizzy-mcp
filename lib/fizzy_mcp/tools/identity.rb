@@ -13,7 +13,7 @@ module FizzyMcp
           MCP::Tool.define(
             name: "fizzy_identity_get",
             description: "Return the authenticated identity and the list of accounts it can access. Useful to discover account slugs.",
-            annotations: { read_only_hint: true, idempotent_hint: true }
+            annotations: { read_only_hint: true, destructive_hint: false, idempotent_hint: true }
           ) do |server_context:, **_args|
             ToolHelpers.with_errors do
               client = server_context[:client]

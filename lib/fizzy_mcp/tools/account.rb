@@ -13,7 +13,7 @@ module FizzyMcp
           MCP::Tool.define(
             name: "fizzy_account_settings",
             description: "Get the account-level settings.",
-            annotations: { read_only_hint: true, idempotent_hint: true }
+            annotations: { read_only_hint: true, destructive_hint: false, idempotent_hint: true }
           ) do |server_context:, **_args|
             ToolHelpers.with_errors { ToolHelpers.ok(server_context[:account].account.settings) }
           end,
@@ -21,7 +21,7 @@ module FizzyMcp
           MCP::Tool.define(
             name: "fizzy_account_join_code",
             description: "Get the current join code for the account.",
-            annotations: { read_only_hint: true, idempotent_hint: true }
+            annotations: { read_only_hint: true, destructive_hint: false, idempotent_hint: true }
           ) do |server_context:, **_args|
             ToolHelpers.with_errors { ToolHelpers.ok(server_context[:account].account.join_code) }
           end,

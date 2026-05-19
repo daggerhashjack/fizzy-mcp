@@ -2,6 +2,24 @@
 
 Append-only. Newest at top. Format: `## [YYYY-MM-DD] <op> | <short>`.
 
+## [2026-05-18] ship | v0.1.1 — broad test coverage + stdio binary test
+
+Coverage went from 27 specs (boards+cards+client+server) to 106 specs
+(every API module + tool round-trips + stdio binary subprocess test +
+edge cases for 401/404/422 + a contract test for tool naming and
+annotation consistency).
+
+Made one annotation correctness fix along the way: the MCP SDK defaults
+`destructive_hint` to true, so a tool marked `read_only_hint: true`
+ends up advertising itself as both read-only and destructive. Now every
+read-only tool explicitly sets `destructive_hint: false`. Surfaced by
+the new contract test.
+
+Manual stdio round-trip against the binary works end-to-end —
+`initialize`, `tools/list` (83 tools), `tools/call` all return proper
+JSON-RPC envelopes. The 401 path against real Fizzy with a dummy token
+produces a clean structured `isError` response.
+
 ## [2026-05-18] ship | v0.1 — full Fizzy API surface as MCP tools
 
 83 MCP tools across 15 resource groups (identity, account, boards,

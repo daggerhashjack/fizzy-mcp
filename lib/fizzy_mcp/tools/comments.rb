@@ -17,7 +17,7 @@ module FizzyMcp
               properties: { card_number: { type: "integer" } },
               required: ["card_number"]
             },
-            annotations: { read_only_hint: true, idempotent_hint: true }
+            annotations: { read_only_hint: true, destructive_hint: false, idempotent_hint: true }
           ) do |server_context:, **args|
             ToolHelpers.with_errors { ToolHelpers.ok(server_context[:account].comments.list(args[:card_number])) }
           end,
@@ -29,7 +29,7 @@ module FizzyMcp
               properties: { card_number: { type: "integer" }, comment_id: { type: "string" } },
               required: %w[card_number comment_id]
             },
-            annotations: { read_only_hint: true, idempotent_hint: true }
+            annotations: { read_only_hint: true, destructive_hint: false, idempotent_hint: true }
           ) do |server_context:, **args|
             ToolHelpers.with_errors do
               ToolHelpers.ok(server_context[:account].comments.get(args[:card_number], args[:comment_id]))

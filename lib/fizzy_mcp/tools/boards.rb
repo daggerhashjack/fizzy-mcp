@@ -13,7 +13,7 @@ module FizzyMcp
           MCP::Tool.define(
             name: "fizzy_boards_list",
             description: "List all boards in the account.",
-            annotations: { read_only_hint: true, idempotent_hint: true }
+            annotations: { read_only_hint: true, destructive_hint: false, idempotent_hint: true }
           ) do |server_context:, **_args|
             ToolHelpers.with_errors { ToolHelpers.ok(server_context[:account].boards.list) }
           end,
@@ -25,7 +25,7 @@ module FizzyMcp
               properties: { board_id: { type: "string" } },
               required: ["board_id"]
             },
-            annotations: { read_only_hint: true, idempotent_hint: true }
+            annotations: { read_only_hint: true, destructive_hint: false, idempotent_hint: true }
           ) do |server_context:, **args|
             ToolHelpers.with_errors { ToolHelpers.ok(server_context[:account].boards.get(args[:board_id])) }
           end,
@@ -88,7 +88,7 @@ module FizzyMcp
               properties: { board_id: { type: "string" } },
               required: ["board_id"]
             },
-            annotations: { read_only_hint: true, idempotent_hint: true }
+            annotations: { read_only_hint: true, destructive_hint: false, idempotent_hint: true }
           ) do |server_context:, **args|
             ToolHelpers.with_errors { ToolHelpers.ok(server_context[:account].boards.accesses(args[:board_id])) }
           end,

@@ -13,7 +13,7 @@ module FizzyMcp
           MCP::Tool.define(
             name: "fizzy_pins_list",
             description: "List the authenticated user's pinned cards.",
-            annotations: { read_only_hint: true, idempotent_hint: true }
+            annotations: { read_only_hint: true, destructive_hint: false, idempotent_hint: true }
           ) do |server_context:, **_args|
             ToolHelpers.with_errors do
               ToolHelpers.ok(Fizzy::Api::Pins.new(server_context[:client], server_context[:account].slug).list)
