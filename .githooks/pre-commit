@@ -1,0 +1,90 @@
+#!/usr/bin/env bash
+# ----------------------------------------------------------------------------
+# Pre-commit: enforce vault Wiki Discipline rule #1
+#   "Every commit writes a log.md line."
+#
+# If the commit touches any file outside vault/, this hook requires
+# vault/log.md to also be staged.
+#
+# Bypass: `git commit --no-verify` (use sparingly, only for automated commits
+# where the log entry has already been written by another commit).
+#
+# Install (one-time): git config core.hooksPath .githooks
+# ----------------------------------------------------------------------------
+
+set -eu
+
+# Skip during merges / rebases / cherry-picks — those are mechanical.
+if [ -f "$(git rev-parse --git-dir)/MERGE_MSG" ] \
+   || [ -d "$(git rev-parse --git-dir)/rebase-merge" ] \
+   || [ -d "$(git rev-parse --git-dir)/rebase-apply" ] \
+   || [ -f "$(git rev-parse --git-dir)/CHERRY_PICK_HEAD" ]; then
+    exit 0
+fi
+
+# List staged files (Added/Copied/Modified/Renamed; skip Deletions).
+# Portable across macOS bash 3.2 — no mapfile.
+staged_files="$(git diff --cached --name-only --diff-filter=ACMR)"
+
+# Empty commit or only deletions — nothing to check.
+if [ -z "$staged_files" ]; then
+    exit 0
+fi
+
+outside_wiki=0
+log_staged=0
+while IFS= read -r f; do
+    [ -z "$f" ] && continue
+    if [ "$f" = "vault/log.md" ]; then
+        log_staged=1
+    fi
+    case "$f" in
+        vault/*) ;;
+        *) outside_wiki=1 ;;
+    esac
+done <<EOF
+$staged_files
+EOF
+
+# Commits that only touch the wiki are exempt — the wiki IS the update.
+if [ "$outside_wiki" -eq 0 ]; then
+    exit 0
+fi
+
+if [ "$log_staged" -eq 1 ]; then
+    exit 0
+fi
+
+# Block.
+cat <<'EOF' >&2
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🚫  Commit blocked by Wiki Discipline rule #1.
+
+Every commit that changes code, config, or content must also append a
+line to vault/log.md.
+
+Format:
+
+  ## [YYYY-MM-DD] <op> | <short>
+
+  One sentence on what changed and why.
+
+Ops: init | ship | fix | refactor | doc | verify | lint | ingest
+
+Why: commit messages answer "what did you do?" — the wiki answers
+"what should future-you know?" Different questions, different layers.
+Full doctrine: vault/wiki/concepts/Wiki Discipline.md
+
+To proceed:
+  1. Append a new entry to vault/log.md
+  2. git add vault/log.md
+  3. git commit again
+
+Bypass (use sparingly — e.g., this commit's log was written by a prior one):
+  git commit --no-verify
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+EOF
+
+exit 1
