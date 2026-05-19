@@ -80,12 +80,12 @@ RSpec.describe "fizzy-mcp tool round trips" do
   end
 
   describe "comments" do
-    it "fizzy_comments_create posts content" do
+    it "fizzy_comments_create posts body" do
       stub = stub_request(:post, "https://app.fizzy.do/6206647/cards/42/comments")
-             .with(body: { comment: { content: "lgtm" } }.to_json)
+             .with(body: { comment: { body: "lgtm" } }.to_json)
              .to_return(status: 201, body: "")
 
-      call_tool("fizzy_comments_create", { card_number: 42, content: "lgtm" })
+      call_tool("fizzy_comments_create", { card_number: 42, body: "lgtm" })
       expect(stub).to have_been_requested
     end
   end

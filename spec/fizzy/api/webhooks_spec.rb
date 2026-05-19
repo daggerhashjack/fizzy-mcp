@@ -22,18 +22,18 @@ RSpec.describe Fizzy::Api::Webhooks do
 
   it "creates" do
     stub_request(:post, "https://app.fizzy.do/6206647/boards/B/webhooks")
-      .with(body: { webhook: { url: "https://example.com/hook" } }.to_json)
+      .with(body: { webhook: { name: "Hook", url: "https://example.com/hook" } }.to_json)
       .to_return(status: 201, body: "")
 
-    webhooks.create("B", url: "https://example.com/hook")
+    webhooks.create("B", name: "Hook", url: "https://example.com/hook")
   end
 
-  it "creates with event_types" do
+  it "creates with subscribed_actions" do
     stub_request(:post, "https://app.fizzy.do/6206647/boards/B/webhooks")
-      .with(body: { webhook: { url: "https://x.test", event_types: %w[card.created] } }.to_json)
+      .with(body: { webhook: { name: "Prod", url: "https://x.test", subscribed_actions: %w[card_published] } }.to_json)
       .to_return(status: 201, body: "")
 
-    webhooks.create("B", url: "https://x.test", event_types: %w[card.created])
+    webhooks.create("B", name: "Prod", url: "https://x.test", subscribed_actions: %w[card_published])
   end
 
   it "patches" do

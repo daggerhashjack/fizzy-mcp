@@ -16,8 +16,8 @@ RSpec.describe Fizzy::Api::Pins do
     pins.unpin(42)
   end
 
-  it "lists pinned cards" do
-    stub_request(:get, "https://app.fizzy.do/my/pins")
+  it "lists pinned cards (account-scoped — bearer auth quirk)" do
+    stub_request(:get, "https://app.fizzy.do/6206647/my/pins")
       .to_return(status: 200, body: "[]", headers: { "Content-Type" => "application/json" })
 
     expect(pins.list).to eq([])

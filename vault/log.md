@@ -2,6 +2,25 @@
 
 Append-only. Newest at top. Format: `## [YYYY-MM-DD] <op> | <short>`.
 
+## [2026-05-19] fix | v0.1.2 — 3 bugs caught by live integration test
+
+Exercised 39 distinct tools against a real Fizzy account. Three real
+library bugs surfaced and were fixed:
+
+1. `fizzy_comments_create` field was `content`, Fizzy wants `body`.
+   The doc table named the field correctly; I assumed it matched the
+   reactions/steps pattern. Bit me with a 400.
+2. `fizzy_pins_list` documented as `GET /my/pins` but that endpoint
+   302-redirects to `/session/menu` when called with a bearer token —
+   session cookies only. Account-scoped form `/<slug>/my/pins` works.
+3. `fizzy_webhooks_create` was missing the required `name` field
+   and used `event_types` instead of `subscribed_actions`. Both fixed.
+
+Also discovered an environmental quirk that surfaced once but doesn't
+indicate a library bug: comments on cards in `not_now` state can't be
+edited/deleted via API (returns 403). Isolated test confirms the
+library works on cards in normal state.
+
 ## [2026-05-18] ship | v0.1.1 — broad test coverage + stdio binary test
 
 Coverage went from 27 specs (boards+cards+client+server) to 106 specs

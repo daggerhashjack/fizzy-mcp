@@ -16,8 +16,8 @@ module Fizzy
         @client.get("#{base(board_id)}/webhooks/#{webhook_id}")
       end
 
-      def create(board_id, url:, event_types: nil)
-        body = { webhook: { url: url, event_types: event_types }.compact }
+      def create(board_id, name:, url:, subscribed_actions: nil)
+        body = { webhook: { name: name, url: url, subscribed_actions: subscribed_actions }.compact }
         @client.post("#{base(board_id)}/webhooks", body: body)
       end
 

@@ -38,14 +38,20 @@ module FizzyMcp
 
           MCP::Tool.define(
             name: "fizzy_comments_create",
-            description: "Post a new comment on a card. Content can be plain text or rich text HTML.",
+            description: "Post a new comment on a card. Body can be plain text or rich text HTML.",
             input_schema: {
-              properties: { card_number: { type: "integer" }, content: { type: "string" } },
-              required: %w[card_number content]
+              properties: {
+                card_number: { type: "integer" },
+                body: { type: "string", description: "Comment body. Supports rich text HTML." },
+                created_at: { type: "string", format: "date-time" }
+              },
+              required: %w[card_number body]
             }
           ) do |server_context:, **args|
             ToolHelpers.with_errors do
-              ToolHelpers.ok(server_context[:account].comments.create(args[:card_number], content: args[:content]))
+              ToolHelpers.ok(server_context[:account].comments.create(args[:card_number],
+                                                                       body: args[:body],
+                                                                       created_at: args[:created_at]))
             end
           end,
 
@@ -56,13 +62,13 @@ module FizzyMcp
               properties: {
                 card_number: { type: "integer" },
                 comment_id: { type: "string" },
-                content: { type: "string" }
+                body: { type: "string" }
               },
-              required: %w[card_number comment_id content]
+              required: %w[card_number comment_id body]
             }
           ) do |server_context:, **args|
             ToolHelpers.with_errors do
-              ToolHelpers.ok(server_context[:account].comments.update(args[:card_number], args[:comment_id], content: args[:content]))
+              ToolHelpers.ok(server_context[:account].comments.update(args[:card_number], args[:comment_id], body: args[:body]))
             end
           end,
 

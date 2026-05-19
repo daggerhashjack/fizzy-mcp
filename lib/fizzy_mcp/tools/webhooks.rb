@@ -38,30 +38,38 @@ module FizzyMcp
 
           MCP::Tool.define(
             name: "fizzy_webhooks_create",
-            description: "Create a webhook on a board pointing at a URL.",
+            description: "Create a webhook on a board pointing at a URL. " \
+                         "subscribed_actions accepts card_assigned, card_closed, card_postponed, " \
+                         "card_auto_postponed, card_board_changed, card_published, card_reopened, " \
+                         "card_sent_back_to_triage, card_triaged, card_unassigned, comment_created.",
             input_schema: {
               properties: {
                 board_id: { type: "string" },
+                name: { type: "string", description: "Human-readable webhook name." },
                 url: { type: "string", format: "uri" },
-                event_types: { type: "array", items: { type: "string" } }
+                subscribed_actions: { type: "array", items: { type: "string" } }
               },
-              required: %w[board_id url]
+              required: %w[board_id name url]
             }
           ) do |server_context:, **args|
             ToolHelpers.with_errors do
-              ToolHelpers.ok(server_context[:account].webhooks.create(args[:board_id], url: args[:url], event_types: args[:event_types]))
+              ToolHelpers.ok(server_context[:account].webhooks.create(args[:board_id],
+                                                                       name: args[:name],
+                                                                       url: args[:url],
+                                                                       subscribed_actions: args[:subscribed_actions]))
             end
           end,
 
           MCP::Tool.define(
             name: "fizzy_webhooks_update",
-            description: "Update a webhook's URL or event_types.",
+            description: "Update a webhook's name, URL, or subscribed_actions.",
             input_schema: {
               properties: {
                 board_id: { type: "string" },
                 webhook_id: { type: "string" },
+                name: { type: "string" },
                 url: { type: "string", format: "uri" },
-                event_types: { type: "array", items: { type: "string" } }
+                subscribed_actions: { type: "array", items: { type: "string" } }
               },
               required: %w[board_id webhook_id]
             }

@@ -16,14 +16,14 @@ module Fizzy
         @client.get("#{base}/cards/#{card_number}/comments/#{comment_id}")
       end
 
-      def create(card_number, content:)
+      def create(card_number, body:, created_at: nil)
         @client.post("#{base}/cards/#{card_number}/comments",
-                     body: { comment: { content: content } })
+                     body: { comment: { body: body, created_at: created_at }.compact })
       end
 
-      def update(card_number, comment_id, content:)
+      def update(card_number, comment_id, body:)
         @client.put("#{base}/cards/#{card_number}/comments/#{comment_id}",
-                    body: { comment: { content: content } })
+                    body: { comment: { body: body } })
       end
 
       def delete(card_number, comment_id)

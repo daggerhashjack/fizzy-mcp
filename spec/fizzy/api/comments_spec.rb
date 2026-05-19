@@ -22,18 +22,18 @@ RSpec.describe Fizzy::Api::Comments do
 
   it "creates a comment" do
     stub_request(:post, "https://app.fizzy.do/6206647/cards/42/comments")
-      .with(body: { comment: { content: "lgtm" } }.to_json)
+      .with(body: { comment: { body: "lgtm" } }.to_json)
       .to_return(status: 201, body: "")
 
-    comments.create(42, content: "lgtm")
+    comments.create(42, body: "lgtm")
   end
 
   it "updates a comment" do
     stub_request(:put, "https://app.fizzy.do/6206647/cards/42/comments/c1")
-      .with(body: { comment: { content: "actually nope" } }.to_json)
+      .with(body: { comment: { body: "actually nope" } }.to_json)
       .to_return(status: 204, body: "")
 
-    comments.update(42, "c1", content: "actually nope")
+    comments.update(42, "c1", body: "actually nope")
   end
 
   it "deletes a comment" do

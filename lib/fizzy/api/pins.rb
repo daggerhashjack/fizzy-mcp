@@ -17,7 +17,10 @@ module Fizzy
       end
 
       def list
-        @client.get("/my/pins")
+        # The Fizzy doc says GET /my/pins, but in practice that endpoint
+        # only works with a session cookie. Bearer-auth callers must use
+        # the account-scoped form.
+        @client.get("/#{@account_slug}/my/pins")
       end
     end
   end

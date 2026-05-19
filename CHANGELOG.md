@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.1.2 — 2026-05-19
+
+Three real bugs caught by exercising the server against a real Fizzy
+account. All three are fixed.
+
+- `fizzy_comments_create` / `fizzy_comments_update` — the API field
+  is `body`, not `content`. Tool input schema and underlying client
+  both updated. The doc's wording made this look like a 422 problem
+  but it surfaced as a 400.
+- `fizzy_pins_list` — the documented endpoint `GET /my/pins`
+  returns a 302 to a session-only path when called with a bearer
+  token. The account-scoped form `/<slug>/my/pins` works. Switched.
+- `fizzy_webhooks_create` — was missing the required `name` field
+  and used `event_types` where Fizzy expects `subscribed_actions`.
+  Both fixed.
+
+39 distinct tools verified end-to-end against a real Fizzy account.
+
 ## 0.1.1 — 2026-05-18
 
 Test coverage and annotation hygiene. No behavior changes worth noting.
